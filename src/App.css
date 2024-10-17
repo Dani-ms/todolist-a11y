@@ -1,0 +1,23 @@
+#root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.todo-list-input{
+  margin-right: var(--spacer);
+}
+.todo-list-form{
+  display: flex;
+  margin-bottom: calc( 2 * var(--spacer) );
+  align-items: center;
+  
+}
+@media screen and (max-width: 768px){
+  .todo-list-form{
+    flex-direction: column;
+    align-items: center;  
+    gap:  var(--spacer) ;
+  }
+}
