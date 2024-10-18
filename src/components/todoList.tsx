@@ -1,5 +1,5 @@
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 interface Todo {
   text: string;
@@ -27,9 +27,26 @@ export function TodoList() {
     newTodos[index].isCompleted = !newTodos[index].isCompleted;
     setTodos(newTodos);
   }
+
+  // Load all localStorage only once when the component is created
+  useEffect(() => {
+    const saveTodos = JSON.parse(localStorage.getItem('todos') || '[]');
+    if(saveTodos){
+      setTodos(saveTodos);
+    }
+    
+  }, []);
+   
+    // Update the localStorage allways the list change 
+    useEffect(() => {
+      if (todos.length > 0) { // Evitar salvar quando não houver To-Dos
+        localStorage.setItem('todos', JSON.stringify(todos));
+      }
+    }, [todos]); 
+
   return (
-  <div>
-    <form  aria-labelledby="todoFormLabel" className="todo-list-form">
+  <div className="todo-list-form">
+    <form  aria-labelledby="todoFormLabel" >
     <label htmlFor="new-todo">
         Add a new task:
       </label>
@@ -42,14 +59,22 @@ export function TodoList() {
         aria-required="true"
         aria-label="New To-Do Item"
       />
-      <button type="submit" className="button" aria-label="Add New To-Do Item" onClick={handleSubmit}>
+      <button type="submit" className=" btn button-primary" aria-label="Add New To-Do Item" onClick={handleSubmit}>
         Add Todo </button>
     </form>
-    
-    <ul aria-label="List of tasks">
+    {todos.length === 0 ? (
+        <div className="todo-list-empty">
+        
+          <img src="src/assets/empty-image.png" alt="You don't have task" />
+          <p aria-live="polite">You don't have task </p>
+        </div>
+      ): ( 
+
+     
+    <ul aria-label="List of tasks" >
     {todos.map((todo: Todo, index: number) => (
       <li key={index}>
-            <div>
+            <div className="todo-list-elements">
               <input
                 type="checkbox"
                 checked={todo.isCompleted}
@@ -62,7 +87,7 @@ export function TodoList() {
               >
                 {todo.text}
               </span>
-              <button
+              <button className="btn button-error"
                 onClick={() => removeTodo(index)}
                 aria-label={`Delete ${todo.text}`}
               >
@@ -72,6 +97,7 @@ export function TodoList() {
           </li>
         ))}
     </ul>
+     )}
     </div>
   );
 }
