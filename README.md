@@ -7,5 +7,3 @@ Create Todo List with acessibility by Daniela Santos
 
 - `npm run dev`
 
-## Test Development
-- `npm run teste `
